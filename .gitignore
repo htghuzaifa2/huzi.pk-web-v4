@@ -1,5 +1,3 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
-
 # dependencies
 /node_modules
 /.pnp
@@ -25,6 +23,7 @@ yarn-debug.log*
 yarn-error.log*
 
 # local env files
+.env
 .env.local
 .env.development.local
 .env.test.local
@@ -36,5 +35,20 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# deploy keys
 deploy_key
 deploy_key.pub
+
+# IDE
+.idx/
+.idea/
+.vscode/
+
+# Other
+.modified
+*.log
+ssh_debug.log
+ssh_wrapper.sh
+worklog.md
+posts_to_enhance.txt
