@@ -40,8 +40,10 @@ PaginationItem.displayName = "PaginationItem"
 type PaginationLinkProps = {
   isActive?: boolean
   onClick?: () => void
+  href?: string
+  className?: string
 } & Pick<ButtonProps, "size"> &
-  Omit<React.ComponentProps<typeof Link>, "href"> & { href?: string }
+  Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "onClick">
 
 const PaginationLink = ({
   className,
@@ -68,7 +70,7 @@ const PaginationLink = ({
       />
     )
   }
-  
+
   return (
     <Link
       aria-current={isActive ? "page" : undefined}
@@ -80,8 +82,9 @@ const PaginationLink = ({
         }),
         className
       )}
-      {...props}
-    />
+    >
+      {props.children}
+    </Link>
   )
 }
 PaginationLink.displayName = "PaginationLink"
@@ -90,7 +93,7 @@ type PaginationNavProps = {
   onClick?: () => void
   className?: string
   disabled?: boolean
-} & Omit<React.ComponentProps<typeof Link>, "href">
+} & Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "onClick">
 
 const PaginationPrevious = ({
   className,
@@ -113,26 +116,26 @@ const PaginationPrevious = ({
           disabled && "pointer-events-none opacity-50",
           className
         )}
+        {...props}
       >
         <ChevronLeft className="h-4 w-4" />
         <span>Prev</span>
       </button>
     )
   }
-  
+
   return (
     <Link
       aria-label="Go to previous page"
+      href="#"
       className={cn(
         buttonVariants({
           variant: "ghost",
           size: "default",
         }),
         "gap-1 pl-2.5",
-        props["aria-disabled"] && "cursor-not-allowed opacity-50",
         className
       )}
-      {...props}
     >
       <ChevronLeft className="h-4 w-4" />
       <span>Prev</span>
@@ -162,26 +165,26 @@ const PaginationNext = ({
           disabled && "pointer-events-none opacity-50",
           className
         )}
+        {...props}
       >
         <span>Next</span>
         <ChevronRight className="h-4 w-4" />
       </button>
     )
   }
-  
+
   return (
     <Link
       aria-label="Go to next page"
+      href="#"
       className={cn(
         buttonVariants({
           variant: "ghost",
           size: "default",
         }),
         "gap-1 pr-2.5",
-        props["aria-disabled"] && "cursor-not-allowed opacity-50",
         className
       )}
-      {...props}
     >
       <span>Next</span>
       <ChevronRight className="h-4 w-4" />
