@@ -25,6 +25,7 @@ export default function Footer() {
             <h3 className="font-headline text-lg font-semibold">Company</h3>
             <ul className="mt-4 space-y-2 text-sm">
               <li><Link href="/sale" className="text-muted-foreground hover:text-primary transition-colors font-bold text-red-500" prefetch={true}>Sale</Link></li>
+              <li><Link href="/blog" className="text-muted-foreground hover:text-primary transition-colors" prefetch={true}>Blog</Link></li>
               <li><Link href="/about" className="text-muted-foreground hover:text-primary transition-colors" prefetch={true}>About Us</Link></li>
               <li><Link href="/contact" className="text-muted-foreground hover:text-primary transition-colors" prefetch={true}>Contact</Link></li>
               <li><Link href="/privacy-policy" className="text-muted-foreground hover:text-primary transition-colors" prefetch={true}>Privacy Policy</Link></li>

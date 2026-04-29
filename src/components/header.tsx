@@ -23,6 +23,7 @@ const mainNavLinks = [
   { href: "/", label: "Home" },
   { href: "/all-products", label: "All Products" },
   { href: "/categories", label: "Categories" },
+  { href: "/blog", label: "Blog" },
   { href: "/about", label: "About" },
   { href: "/contact", label: "Contact" },
 ];
