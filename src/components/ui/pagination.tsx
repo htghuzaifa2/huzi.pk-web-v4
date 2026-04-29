@@ -1,4 +1,3 @@
-
 "use client"
 
 import * as React from "react"
@@ -40,72 +39,155 @@ PaginationItem.displayName = "PaginationItem"
 
 type PaginationLinkProps = {
   isActive?: boolean
+  onClick?: () => void
 } & Pick<ButtonProps, "size"> &
-  Omit<React.ComponentProps<typeof Link>, "href"> & { href: string }
-
+  Omit<React.ComponentProps<typeof Link>, "href"> & { href?: string }
 
 const PaginationLink = ({
   className,
   isActive,
   size = "icon",
+  onClick,
+  href,
   ...props
-}: PaginationLinkProps) => (
-  <Link
-    aria-current={isActive ? "page" : undefined}
-    className={cn(
-      buttonVariants({
-        variant: isActive ? "default" : "ghost",
-        size,
-      }),
-      className
-    )}
-    {...props}
-  />
-)
+}: PaginationLinkProps) => {
+  if (onClick) {
+    return (
+      <button
+        aria-current={isActive ? "page" : undefined}
+        onClick={onClick}
+        className={cn(
+          buttonVariants({
+            variant: isActive ? "default" : "ghost",
+            size,
+          }),
+          "cursor-pointer",
+          className
+        )}
+        {...props}
+      />
+    )
+  }
+  
+  return (
+    <Link
+      aria-current={isActive ? "page" : undefined}
+      href={href || "#"}
+      className={cn(
+        buttonVariants({
+          variant: isActive ? "default" : "ghost",
+          size,
+        }),
+        className
+      )}
+      {...props}
+    />
+  )
+}
 PaginationLink.displayName = "PaginationLink"
+
+type PaginationNavProps = {
+  onClick?: () => void
+  className?: string
+  disabled?: boolean
+} & Omit<React.ComponentProps<typeof Link>, "href">
 
 const PaginationPrevious = ({
   className,
+  onClick,
+  disabled,
   ...props
-}: React.ComponentProps<typeof Link>) => (
-   <Link
-    aria-label="Go to previous page"
-    className={cn(buttonVariants({
-        variant: "ghost",
-        size: "default",
-      }),
-      "gap-1 pl-2.5",
-      props["aria-disabled"] && "cursor-not-allowed opacity-50",
-      className
-    )}
-    {...props}
-  >
-    <ChevronLeft className="h-4 w-4" />
-    <span>Previous</span>
-  </Link>
-)
+}: PaginationNavProps) => {
+  if (onClick) {
+    return (
+      <button
+        aria-label="Go to previous page"
+        onClick={onClick}
+        disabled={disabled}
+        className={cn(
+          buttonVariants({
+            variant: "ghost",
+            size: "default",
+          }),
+          "gap-1 pl-2.5 cursor-pointer",
+          disabled && "pointer-events-none opacity-50",
+          className
+        )}
+      >
+        <ChevronLeft className="h-4 w-4" />
+        <span>Prev</span>
+      </button>
+    )
+  }
+  
+  return (
+    <Link
+      aria-label="Go to previous page"
+      className={cn(
+        buttonVariants({
+          variant: "ghost",
+          size: "default",
+        }),
+        "gap-1 pl-2.5",
+        props["aria-disabled"] && "cursor-not-allowed opacity-50",
+        className
+      )}
+      {...props}
+    >
+      <ChevronLeft className="h-4 w-4" />
+      <span>Prev</span>
+    </Link>
+  )
+}
 PaginationPrevious.displayName = "PaginationPrevious"
 
 const PaginationNext = ({
   className,
+  onClick,
+  disabled,
   ...props
-}: React.ComponentProps<typeof Link>) => (
-  <Link
-    aria-label="Go to next page"
-    className={cn(buttonVariants({
-        variant: "ghost",
-        size: "default",
-      }),
-      "gap-1 pr-2.5",
-      props["aria-disabled"] && "cursor-not-allowed opacity-50",
-      className
-    )}
-    {...props}
-  >
-    <span>Next</span>
-    <ChevronRight className="h-4 w-4" />
-  </Link>
-)
+}: PaginationNavProps) => {
+  if (onClick) {
+    return (
+      <button
+        aria-label="Go to next page"
+        onClick={onClick}
+        disabled={disabled}
+        className={cn(
+          buttonVariants({
+            variant: "ghost",
+            size: "default",
+          }),
+          "gap-1 pr-2.5 cursor-pointer",
+          disabled && "pointer-events-none opacity-50",
+          className
+        )}
+      >
+        <span>Next</span>
+        <ChevronRight className="h-4 w-4" />
+      </button>
+    )
+  }
+  
+  return (
+    <Link
+      aria-label="Go to next page"
+      className={cn(
+        buttonVariants({
+          variant: "ghost",
+          size: "default",
+        }),
+        "gap-1 pr-2.5",
+        props["aria-disabled"] && "cursor-not-allowed opacity-50",
+        className
+      )}
+      {...props}
+    >
+      <span>Next</span>
+      <ChevronRight className="h-4 w-4" />
+    </Link>
+  )
+}
 PaginationNext.displayName = "PaginationNext"
 
 const PaginationEllipsis = ({

@@ -12,8 +12,10 @@ import {
     PaginationItem,
     PaginationLink,
     PaginationEllipsis,
+    PaginationPrevious,
+    PaginationNext,
 } from "@/components/ui/pagination"
-import { Search, Calendar, ArrowRight, ChevronLeft, ChevronRight } from "lucide-react"
+import { Search, Calendar, ArrowRight, ChevronsLeft, ChevronsRight } from "lucide-react"
 import type { BlogMetadata } from "@/lib/blog"
 
 const POSTS_PER_PAGE = 25
@@ -25,11 +27,9 @@ interface BlogListingProps {
 export default function BlogListing({ posts }: BlogListingProps) {
     const [searchQuery, setSearchQuery] = useState("")
     const [currentPage, setCurrentPage] = useState(1)
-    const [isClient, setIsClient] = useState(false)
 
     // Initialize from URL on client-side only
     useEffect(() => {
-        setIsClient(true)
         const params = new URLSearchParams(window.location.search)
         const q = params.get("q") || ""
         const page = parseInt(params.get("page") || "1", 10)
@@ -54,7 +54,7 @@ export default function BlogListing({ posts }: BlogListingProps) {
     // Handle search input change
     const handleSearchChange = (value: string) => {
         setSearchQuery(value)
-        setCurrentPage(1) // Reset to page 1 when searching
+        setCurrentPage(1)
         updateUrl(1, value)
     }
 
@@ -136,15 +136,6 @@ export default function BlogListing({ posts }: BlogListingProps) {
             updates: "bg-purple-500/10 text-purple-600 dark:text-purple-400",
         }
         return colors[topic] || "bg-muted text-muted-foreground"
-    }
-
-    // Build URL for pagination links (for SEO and proper navigation)
-    const buildUrl = (page: number) => {
-        const params = new URLSearchParams()
-        if (searchQuery) params.set("q", searchQuery)
-        if (page > 1) params.set("page", page.toString())
-        const queryString = params.toString()
-        return queryString ? `/blog?${queryString}` : "/blog"
     }
 
     return (
@@ -255,21 +246,26 @@ export default function BlogListing({ posts }: BlogListingProps) {
                             <div className="mt-12 flex flex-col items-center gap-4">
                                 <Pagination>
                                     <PaginationContent>
-                                        {/* Previous Button */}
+                                        {/* First Page */}
                                         <PaginationItem>
-                                            {currentPage === 1 ? (
-                                                <span className="flex h-9 w-9 items-center justify-center text-muted-foreground/50">
-                                                    <ChevronLeft className="h-4 w-4" />
-                                                </span>
-                                            ) : (
-                                                <button
-                                                    onClick={() => handlePageChange(currentPage - 1)}
-                                                    className="flex h-9 w-9 items-center justify-center rounded-md hover:bg-accent hover:text-accent-foreground transition-colors"
-                                                    aria-label="Go to previous page"
-                                                >
-                                                    <ChevronLeft className="h-4 w-4" />
-                                                </button>
-                                            )}
+                                            <Button
+                                                variant="ghost"
+                                                size="icon"
+                                                onClick={() => handlePageChange(1)}
+                                                disabled={currentPage === 1}
+                                                className="h-9 w-9"
+                                                aria-label="Go to first page"
+                                            >
+                                                <ChevronsLeft className="h-4 w-4" />
+                                            </Button>
+                                        </PaginationItem>
+
+                                        {/* Previous */}
+                                        <PaginationItem>
+                                            <PaginationPrevious 
+                                                onClick={() => handlePageChange(currentPage - 1)}
+                                                disabled={currentPage === 1}
+                                            />
                                         </PaginationItem>
 
                                         {/* Page Numbers */}
@@ -279,11 +275,7 @@ export default function BlogListing({ posts }: BlogListingProps) {
                                                     <PaginationEllipsis />
                                                 ) : (
                                                     <PaginationLink
-                                                        href={buildUrl(page)}
-                                                        onClick={(e) => {
-                                                            e.preventDefault()
-                                                            handlePageChange(page)
-                                                        }}
+                                                        onClick={() => handlePageChange(page)}
                                                         isActive={currentPage === page}
                                                     >
                                                         {page}
@@ -292,21 +284,26 @@ export default function BlogListing({ posts }: BlogListingProps) {
                                             </PaginationItem>
                                         ))}
 
-                                        {/* Next Button */}
+                                        {/* Next */}
                                         <PaginationItem>
-                                            {currentPage === totalPages ? (
-                                                <span className="flex h-9 w-9 items-center justify-center text-muted-foreground/50">
-                                                    <ChevronRight className="h-4 w-4" />
-                                                </span>
-                                            ) : (
-                                                <button
-                                                    onClick={() => handlePageChange(currentPage + 1)}
-                                                    className="flex h-9 w-9 items-center justify-center rounded-md hover:bg-accent hover:text-accent-foreground transition-colors"
-                                                    aria-label="Go to next page"
-                                                >
-                                                    <ChevronRight className="h-4 w-4" />
-                                                </button>
-                                            )}
+                                            <PaginationNext 
+                                                onClick={() => handlePageChange(currentPage + 1)}
+                                                disabled={currentPage === totalPages}
+                                            />
+                                        </PaginationItem>
+
+                                        {/* Last Page */}
+                                        <PaginationItem>
+                                            <Button
+                                                variant="ghost"
+                                                size="icon"
+                                                onClick={() => handlePageChange(totalPages)}
+                                                disabled={currentPage === totalPages}
+                                                className="h-9 w-9"
+                                                aria-label="Go to last page"
+                                            >
+                                                <ChevronsRight className="h-4 w-4" />
+                                            </Button>
                                         </PaginationItem>
                                     </PaginationContent>
                                 </Pagination>
