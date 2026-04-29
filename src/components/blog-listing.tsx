@@ -6,18 +6,8 @@ import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import {
-    Pagination,
-    PaginationContent,
-    PaginationItem,
-    PaginationLink,
-    PaginationEllipsis,
-} from "@/components/ui/pagination"
-import { Search, Calendar, ArrowRight, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from "lucide-react"
+import { Search, Calendar, ArrowRight } from "lucide-react"
 import type { BlogMetadata } from "@/lib/blog"
-import { cn } from "@/lib/utils"
-
-const POSTS_PER_PAGE = 25
 
 interface BlogListingProps {
     posts: BlogMetadata[]
@@ -25,24 +15,20 @@ interface BlogListingProps {
 
 export default function BlogListing({ posts }: BlogListingProps) {
     const [searchQuery, setSearchQuery] = useState("")
-    const [currentPage, setCurrentPage] = useState(1)
 
     // Initialize from URL on client-side only
     useEffect(() => {
         const params = new URLSearchParams(window.location.search)
         const q = params.get("q") || ""
-        const page = parseInt(params.get("page") || "1", 10)
         setSearchQuery(q)
-        setCurrentPage(page)
     }, [])
 
-    // Update URL when search or page changes
-    const updateUrl = useCallback((page: number, query: string) => {
+    // Update URL when search changes
+    const updateUrl = useCallback((query: string) => {
         if (typeof window === "undefined") return
 
         const params = new URLSearchParams()
         if (query) params.set("q", query)
-        if (page > 1) params.set("page", page.toString())
 
         const queryString = params.toString()
         const newUrl = queryString ? `${window.location.pathname}?${queryString}` : window.location.pathname
@@ -53,15 +39,7 @@ export default function BlogListing({ posts }: BlogListingProps) {
     // Handle search input change
     const handleSearchChange = (value: string) => {
         setSearchQuery(value)
-        setCurrentPage(1)
-        updateUrl(1, value)
-    }
-
-    // Handle page change
-    const handlePageChange = (page: number) => {
-        setCurrentPage(page)
-        updateUrl(page, searchQuery)
-        window.scrollTo({ top: 0, behavior: "smooth" })
+        updateUrl(value)
     }
 
     // Filter posts based on search query
@@ -77,39 +55,6 @@ export default function BlogListing({ posts }: BlogListingProps) {
             return titleMatch || excerptMatch || tagsMatch || topicMatch
         })
     }, [posts, searchQuery])
-
-    // Calculate pagination
-    const totalPages = Math.ceil(filteredPosts.length / POSTS_PER_PAGE)
-    const paginatedPosts = useMemo(() => {
-        const start = (currentPage - 1) * POSTS_PER_PAGE
-        return filteredPosts.slice(start, start + POSTS_PER_PAGE)
-    }, [filteredPosts, currentPage])
-
-    // Generate page numbers to display
-    const getPageNumbers = () => {
-        const pages: (number | "ellipsis")[] = []
-        const showEllipsisStart = currentPage > 3
-        const showEllipsisEnd = currentPage < totalPages - 2
-
-        if (totalPages <= 7) {
-            for (let i = 1; i <= totalPages; i++) pages.push(i)
-        } else {
-            pages.push(1)
-            if (showEllipsisStart) {
-                pages.push("ellipsis")
-            }
-            const start = Math.max(2, currentPage - 1)
-            const end = Math.min(totalPages - 1, currentPage + 1)
-            for (let i = start; i <= end; i++) {
-                if (!pages.includes(i)) pages.push(i)
-            }
-            if (showEllipsisEnd) {
-                pages.push("ellipsis")
-            }
-            if (!pages.includes(totalPages)) pages.push(totalPages)
-        }
-        return pages
-    }
 
     // Format date
     const formatDate = (dateStr: string) => {
@@ -184,7 +129,7 @@ export default function BlogListing({ posts }: BlogListingProps) {
 
             {/* Blog Grid */}
             <div className="container mx-auto px-4 py-8 md:py-12">
-                {paginatedPosts.length === 0 ? (
+                {filteredPosts.length === 0 ? (
                     <div className="text-center py-16">
                         <div className="text-6xl mb-4">🔍</div>
                         <h3 className="text-2xl font-semibold mb-2">No blogs found</h3>
@@ -200,151 +145,44 @@ export default function BlogListing({ posts }: BlogListingProps) {
                         </Button>
                     </div>
                 ) : (
-                    <>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 md:gap-6">
-                            {paginatedPosts.map((post) => (
-                                <Link
-                                    key={`${post.topic}-${post.slug}`}
-                                    href={`/blog/${post.topic}/${post.slug}`}
-                                    className="group"
-                                >
-                                    <Card className="h-full flex flex-col hover:shadow-lg hover:border-primary/50 transition-all duration-300 overflow-hidden">
-                                        {/* Topic Badge */}
-                                        <div className="px-4 pt-4">
-                                            <Badge className={`${getTopicColor(post.topic)} text-xs font-medium`}>
-                                                {post.topic}
-                                            </Badge>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 md:gap-6">
+                        {filteredPosts.map((post) => (
+                            <Link
+                                key={`${post.topic}-${post.slug}`}
+                                href={`/blog/${post.topic}/${post.slug}`}
+                                className="group"
+                            >
+                                <Card className="h-full flex flex-col hover:shadow-lg hover:border-primary/50 transition-all duration-300 overflow-hidden">
+                                    {/* Topic Badge */}
+                                    <div className="px-4 pt-4">
+                                        <Badge className={`${getTopicColor(post.topic)} text-xs font-medium`}>
+                                            {post.topic}
+                                        </Badge>
+                                    </div>
+
+                                    <CardHeader className="pb-2 pt-3 px-4">
+                                        <h2 className="text-base md:text-lg font-semibold line-clamp-2 group-hover:text-primary transition-colors">
+                                            {post.title}
+                                        </h2>
+                                    </CardHeader>
+
+                                    <CardContent className="flex-grow px-4 pb-2">
+                                        <p className="text-sm text-muted-foreground line-clamp-2">
+                                            {post.excerpt}
+                                        </p>
+                                    </CardContent>
+
+                                    <CardFooter className="flex items-center justify-between pt-2 px-4 pb-4 border-t mt-auto">
+                                        <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                                            <Calendar className="h-3.5 w-3.5" />
+                                            <span>{formatDate(post.date)}</span>
                                         </div>
-
-                                        <CardHeader className="pb-2 pt-3 px-4">
-                                            <h2 className="text-base md:text-lg font-semibold line-clamp-2 group-hover:text-primary transition-colors">
-                                                {post.title}
-                                            </h2>
-                                        </CardHeader>
-
-                                        <CardContent className="flex-grow px-4 pb-2">
-                                            <p className="text-sm text-muted-foreground line-clamp-2">
-                                                {post.excerpt}
-                                            </p>
-                                        </CardContent>
-
-                                        <CardFooter className="flex items-center justify-between pt-2 px-4 pb-4 border-t mt-auto">
-                                            <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                                                <Calendar className="h-3.5 w-3.5" />
-                                                <span>{formatDate(post.date)}</span>
-                                            </div>
-                                            <ArrowRight className="h-4 w-4 text-muted-foreground group-hover:text-primary group-hover:translate-x-1 transition-all" />
-                                        </CardFooter>
-                                    </Card>
-                                </Link>
-                            ))}
-                        </div>
-
-                        {/* Pagination */}
-                        {totalPages > 1 && (
-                            <div className="mt-12 flex flex-col items-center gap-4">
-                                <Pagination>
-                                    <PaginationContent>
-                                        {/* First Page Button */}
-                                        <PaginationItem className="hidden sm:block">
-                                            {currentPage === 1 ? (
-                                                <span className="flex h-9 w-9 items-center justify-center text-muted-foreground/50">
-                                                    <ChevronsLeft className="h-4 w-4" />
-                                                </span>
-                                            ) : (
-                                                <button
-                                                    onClick={() => handlePageChange(1)}
-                                                    className="flex h-9 w-9 items-center justify-center rounded-md hover:bg-accent hover:text-accent-foreground transition-colors"
-                                                    aria-label="Go to first page"
-                                                >
-                                                    <ChevronsLeft className="h-4 w-4" />
-                                                </button>
-                                            )}
-                                        </PaginationItem>
-
-                                        {/* Previous Button */}
-                                        <PaginationItem>
-                                            {currentPage === 1 ? (
-                                                <span className="flex h-9 w-9 items-center justify-center text-muted-foreground/50">
-                                                    <ChevronLeft className="h-4 w-4" />
-                                                </span>
-                                            ) : (
-                                                <button
-                                                    onClick={() => handlePageChange(currentPage - 1)}
-                                                    className="flex h-9 w-9 items-center justify-center rounded-md hover:bg-accent hover:text-accent-foreground transition-colors"
-                                                    aria-label="Go to previous page"
-                                                >
-                                                    <ChevronLeft className="h-4 w-4" />
-                                                </button>
-                                            )}
-                                        </PaginationItem>
-
-                                        {/* Page Numbers */}
-                                        {getPageNumbers().map((page, i) => (
-                                            <PaginationItem key={i}>
-                                                {page === "ellipsis" ? (
-                                                    <PaginationEllipsis />
-                                                ) : (
-                                                    <button
-                                                        onClick={() => handlePageChange(page)}
-                                                        className={cn(
-                                                            "flex h-9 w-9 items-center justify-center rounded-md transition-colors",
-                                                            currentPage === page
-                                                                ? "bg-primary text-primary-foreground"
-                                                                : "hover:bg-accent hover:text-accent-foreground"
-                                                        )}
-                                                        aria-label={`Go to page ${page}`}
-                                                        aria-current={currentPage === page ? "page" : undefined}
-                                                    >
-                                                        {page}
-                                                    </button>
-                                                )}
-                                            </PaginationItem>
-                                        ))}
-
-                                        {/* Next Button */}
-                                        <PaginationItem>
-                                            {currentPage === totalPages ? (
-                                                <span className="flex h-9 w-9 items-center justify-center text-muted-foreground/50">
-                                                    <ChevronRight className="h-4 w-4" />
-                                                </span>
-                                            ) : (
-                                                <button
-                                                    onClick={() => handlePageChange(currentPage + 1)}
-                                                    className="flex h-9 w-9 items-center justify-center rounded-md hover:bg-accent hover:text-accent-foreground transition-colors"
-                                                    aria-label="Go to next page"
-                                                >
-                                                    <ChevronRight className="h-4 w-4" />
-                                                </button>
-                                            )}
-                                        </PaginationItem>
-
-                                        {/* Last Page Button */}
-                                        <PaginationItem className="hidden sm:block">
-                                            {currentPage === totalPages ? (
-                                                <span className="flex h-9 w-9 items-center justify-center text-muted-foreground/50">
-                                                    <ChevronsRight className="h-4 w-4" />
-                                                </span>
-                                            ) : (
-                                                <button
-                                                    onClick={() => handlePageChange(totalPages)}
-                                                    className="flex h-9 w-9 items-center justify-center rounded-md hover:bg-accent hover:text-accent-foreground transition-colors"
-                                                    aria-label="Go to last page"
-                                                >
-                                                    <ChevronsRight className="h-4 w-4" />
-                                                </button>
-                                            )}
-                                        </PaginationItem>
-                                    </PaginationContent>
-                                </Pagination>
-
-                                {/* Page info */}
-                                <p className="text-sm text-muted-foreground">
-                                    Page {currentPage} of {totalPages} ({filteredPosts.length} posts)
-                                </p>
-                            </div>
-                        )}
-                    </>
+                                        <ArrowRight className="h-4 w-4 text-muted-foreground group-hover:text-primary group-hover:translate-x-1 transition-all" />
+                                    </CardFooter>
+                                </Card>
+                            </Link>
+                        ))}
+                    </div>
                 )}
             </div>
         </div>
