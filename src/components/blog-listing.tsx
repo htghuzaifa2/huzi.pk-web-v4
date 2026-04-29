@@ -245,15 +245,15 @@ export default function BlogListing({ posts }: BlogListingProps) {
                         {totalPages > 1 && (
                             <div className="mt-12 flex flex-col items-center gap-4">
                                 <Pagination>
-                                    <PaginationContent>
+                                    <PaginationContent className="flex-wrap justify-center">
                                         {/* First Page */}
-                                        <PaginationItem>
+                                        <PaginationItem className="hidden sm:flex">
                                             <Button
                                                 variant="ghost"
                                                 size="icon"
                                                 onClick={() => handlePageChange(1)}
                                                 disabled={currentPage === 1}
-                                                className="h-9 w-9"
+                                                className="h-9 w-9 shrink-0"
                                                 aria-label="Go to first page"
                                             >
                                                 <ChevronsLeft className="h-4 w-4" />
@@ -265,12 +265,13 @@ export default function BlogListing({ posts }: BlogListingProps) {
                                             <PaginationPrevious 
                                                 onClick={() => handlePageChange(currentPage - 1)}
                                                 disabled={currentPage === 1}
+                                                className="shrink-0"
                                             />
                                         </PaginationItem>
 
                                         {/* Page Numbers */}
                                         {getPageNumbers().map((page, i) => (
-                                            <PaginationItem key={i}>
+                                            <PaginationItem key={i} className="shrink-0">
                                                 {page === "ellipsis" ? (
                                                     <PaginationEllipsis />
                                                 ) : (
@@ -289,17 +290,18 @@ export default function BlogListing({ posts }: BlogListingProps) {
                                             <PaginationNext 
                                                 onClick={() => handlePageChange(currentPage + 1)}
                                                 disabled={currentPage === totalPages}
+                                                className="shrink-0"
                                             />
                                         </PaginationItem>
 
                                         {/* Last Page */}
-                                        <PaginationItem>
+                                        <PaginationItem className="hidden sm:flex">
                                             <Button
                                                 variant="ghost"
                                                 size="icon"
                                                 onClick={() => handlePageChange(totalPages)}
                                                 disabled={currentPage === totalPages}
-                                                className="h-9 w-9"
+                                                className="h-9 w-9 shrink-0"
                                                 aria-label="Go to last page"
                                             >
                                                 <ChevronsRight className="h-4 w-4" />
