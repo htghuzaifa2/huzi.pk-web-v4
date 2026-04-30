@@ -3,7 +3,6 @@ import { getBlogPost, getAllBlogRoutes } from "@/lib/blog"
 import { notFound } from "next/navigation"
 import BlogRelatedProducts from "@/components/blog-related-products"
 import BlogContent from "@/components/blog-content"
-import TableOfContents from "@/components/table-of-contents"
 
 export async function generateStaticParams() {
     const routes = getAllBlogRoutes()
@@ -45,10 +44,8 @@ export default async function BlogPost({ params }: { params: { topic: string; sl
 
         return (
             <>
-                {/* Main Blog Layout with Sidebar */}
-                <div className="blog-layout container mx-auto py-12">
-                    {/* Main Content Area */}
-                    <article className="blog-post">
+                <div className="container mx-auto py-12 px-4">
+                    <article className="blog-post max-w-4xl mx-auto">
                         <h1 className="blog-title text-4xl md:text-5xl lg:text-6xl font-bold mb-4 text-center">
                             {post.title}
                         </h1>
@@ -61,15 +58,7 @@ export default async function BlogPost({ params }: { params: { topic: string; sl
 
                         <BlogContent content={post.content} />
                     </article>
-
-                    {/* Table of Contents Sidebar */}
-                    <aside className="blog-sidebar hidden xl:block">
-                        <TableOfContents />
-                    </aside>
                 </div>
-
-                {/* Mobile/Tablet TOC - shown via fixed button */}
-                <TableOfContents />
 
                 {/* Related products section */}
                 <div className="container mx-auto px-4 pb-16">
