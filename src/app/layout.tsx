@@ -55,11 +55,11 @@ const siteConfig = {
 };
 
 export const metadata: Metadata = {
-  metadataBase: new URL(siteConfig.url),
-  title: siteConfig.title,
-  description: siteConfig.description,
+  metadataBase: new URL("https://huzi.pk"),
+  title: "Huzi.pk | Quality & Style, Delivered in Pakistan",
+  description: "Huzi.pk: Your trusted hub for premium quality Pakistani Fashion & Tech Products. Shop confidently with nationwide delivery. Digital Products & E-Books available worldwide! Find quality and style. Shop Now!",
   keywords: siteConfig.keywords,
-  authors: [{ name: "huzi.pk", url: siteConfig.url }],
+  authors: [{ name: "huzi.pk", url: "https://huzi.pk" }],
   creator: "huzi.pk",
   publisher: "huzi.pk",
   icons: {
@@ -70,17 +70,17 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_PK",
-    url: siteConfig.url,
-    title: siteConfig.title,
-    description: siteConfig.description,
-    images: [`${siteConfig.url}/favicon.ico`],
-    siteName: siteConfig.name,
+    url: "https://huzi.pk",
+    title: "Huzi.pk | Quality & Style, Delivered in Pakistan",
+    description: "Huzi.pk: Your trusted hub for premium quality Pakistani Fashion & Tech Products. Shop confidently with nationwide delivery. Digital Products & E-Books available worldwide! Find quality and style. Shop Now!",
+    images: ["https://huzi.pk/favicon.ico"],
+    siteName: "Huzi.pk",
   },
   twitter: {
     card: "summary_large_image",
-    title: siteConfig.title,
-    description: siteConfig.description,
-    images: [`${siteConfig.url}/favicon.ico`],
+    title: "Huzi.pk | Quality & Style, Delivered in Pakistan",
+    description: "Huzi.pk: Your trusted hub for premium quality Pakistani Fashion & Tech Products. Shop confidently with nationwide delivery. Digital Products & E-Books available worldwide! Find quality and style. Shop Now!",
+    images: ["https://huzi.pk/favicon.ico"],
   },
 };
 
