@@ -7,7 +7,7 @@ export const metadata: Metadata = {
     openGraph: {
         title: "Privacy Policy - huzi.pk",
         description: "Read our privacy policy to understand how we value your privacy and handle information at huzi.pk. We do not collect any user data.",
-        url: "/privacy-policy",
+        url: "https://huzi.pk/privacy-policy",
     }
 };
 

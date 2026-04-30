@@ -17,18 +17,18 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   
   if (!category) {
     return {
-      title: 'Category Not Found',
+      title: 'Category Not Found - huzi.pk',
       description: 'The category you are looking for does not exist.',
     };
   }
 
   return {
-    title: `${category.name} Collection`,
+    title: `${category.name} - huzi.pk`,
     description: `Shop the best ${category.name} at huzi.pk. Explore our curated collection and find the latest trends in ${category.name.toLowerCase()}.`,
     openGraph: {
-      title: `${category.name} Collection`,
+      title: `${category.name} - huzi.pk`,
       description: `Shop the best ${category.name} at huzi.pk. Explore our curated collection and find the latest trends in ${category.name.toLowerCase()}.`,
-      url: `/category/${category.slug}`,
+      url: `https://huzi.pk/category/${category.slug}`,
       images: [
         {
           url: category.image,

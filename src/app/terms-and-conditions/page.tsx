@@ -7,7 +7,7 @@ export const metadata: Metadata = {
     openGraph: {
         title: "Terms & Conditions - huzi.pk",
         description: "Read our terms and conditions to understand the rules and guidelines for using huzi.pk. We aim to provides a fair and transparent experience for all customers.",
-        url: "/terms-and-conditions",
+        url: "https://huzi.pk/terms-and-conditions",
     }
 };
 

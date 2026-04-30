@@ -30,9 +30,9 @@ const alegreya = Alegreya({
 });
 
 const siteConfig = {
-  name: "huzi.pk",
+  name: "Huzi.pk",
   url: "https://huzi.pk",
-  title: "huzi.pk | Quality & Style, Delivered in Pakistan",
+  title: "Huzi.pk | Quality & Style, Delivered in Pakistan",
   description: "Huzi.pk: Your trusted hub for premium quality Pakistani Fashion & Tech Products. Shop confidently with nationwide delivery. Digital Products & E-Books available worldwide! Find quality and style. Shop Now!",
   keywords: [
     "online shopping pakistan",
@@ -56,10 +56,7 @@ const siteConfig = {
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
-  title: {
-    default: siteConfig.title,
-    template: `%s - huzi.pk`,
-  },
+  title: siteConfig.title,
   description: siteConfig.description,
   keywords: siteConfig.keywords,
   authors: [{ name: "huzi.pk", url: siteConfig.url }],

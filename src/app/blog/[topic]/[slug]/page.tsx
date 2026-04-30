@@ -15,10 +15,10 @@ export async function generateMetadata({ params }: { params: { topic: string; sl
         if (!post) return {}
 
         return {
-            title: post.title,
+            title: `${post.title} - huzi.pk`,
             description: post.description,
             openGraph: {
-                title: post.title,
+                title: `${post.title} - huzi.pk`,
                 description: post.description,
                 type: 'article',
                 url: `https://huzi.pk/blog/${params.topic}/${params.slug}`,
@@ -26,7 +26,7 @@ export async function generateMetadata({ params }: { params: { topic: string; sl
             },
             twitter: {
                 card: 'summary_large_image',
-                title: post.title,
+                title: `${post.title} - huzi.pk`,
                 description: post.description,
                 images: post.image ? [post.image] : undefined,
             },
