@@ -11,10 +11,8 @@ const siteConfig = {
   description: "Huzi.pk: Your trusted hub for premium quality Pakistani Fashion & Tech Products. Shop confidently with nationwide delivery. Digital Products & E-Books available worldwide! Find quality and style. Shop Now!",
 };
 
-export const metadata: Metadata = {
-  title: "Quality & Style, Delivered in Pakistan",
-  description: siteConfig.description,
-};
+// Homepage inherits title from root layout: "Huzi.pk | Quality & Style, Delivered in Pakistan"
+// No metadata override needed - Huzi.pk appears first as requested
 
 export default function Home() {
   const featuredProducts = productsData.slice(0, 5);

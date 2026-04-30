@@ -20,7 +20,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   if (!product) {
     return {
-      title: 'Product Not Found',
+      title: 'Product Not Found - huzi.pk',
       description: 'The product you are looking for does not exist.',
     };
   }
@@ -31,10 +31,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const description = `Shop the ${product.name}, a premium ${primaryCategoryName} at huzi.pk. ${product.description} Enjoy nationwide delivery in Pakistan.`.substring(0, 160);
 
   return {
-    title: product.name,
+    title: `${product.name} - huzi.pk`,
     description: description,
     openGraph: {
-      title: product.name,
+      title: `${product.name} - huzi.pk`,
       description: description,
       url: `/product/${product.slug}`,
       images: [
